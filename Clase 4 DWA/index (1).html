@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>☕ Café &amp; Co.</title>
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+
+<body>
+
+    <header class="header-bar">
+        <span>☕ Café &amp; Co.</span>
+        <span>🛒 <span class="cart-count" id="cartCount">0</span></span>
+    </header>
+
+    <section class="hero">
+        <h1>☕ Café &amp; Co.</h1>
+        <p>Disfruta de nuestros productos artesanales</p>
+    </section>
+
+    <div class="cards-container">
+
+        <div class="product-card highlight">
+            <div class="card-image">☕</div>
+            <h2 class="product-name">Café Colombiano</h2>
+            <p class="product-desc">Café de origen, notas a chocolate y frutos rojos.</p>
+            <div class="product-price">$12.90 <small>USD</small></div>
+            <button class="btn-comprar" data-producto="Café Colombiano">Comprar</button>
+        </div>
+
+        <div class="product-card highlight">
+            <div class="card-image">🧁</div>
+            <h2 class="product-name">Pastel de Zanahoria</h2>
+            <p class="product-desc">Bizcocho esponjoso con cream cheese.</p>
+            <div class="product-price">$4.50 <small>USD</small></div>
+            <button class="btn-comprar" data-producto="Pastel de Zanahoria">Comprar</button>
+        </div>
+
+        <div class="product-card highlight">
+            <div class="card-image">🥐</div>
+            <h2 class="product-name">Croissant</h2>
+            <p class="product-desc">Hojaldre mantecoso, perfecto para acompañar.</p>
+            <div class="product-price">$3.20 <small>USD</small></div>
+            <button class="btn-comprar" data-producto="Croissant">Comprar</button>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <footer class="footer">
+        &copy; 2026 Café &amp; Co. &mdash; Todos los derechos reservados.
+    </footer>
+
+    <script>
+        const cartCount = document.getElementById("cartCount");
+        const toastEl = document.getElementById("toast");
+        let count = 0;
+
+        function mostrarToast(texto) {
+            toastEl.textContent = "✅ " + texto + " agregado";
+            toastEl.classList.add("show");
+            setTimeout(function () { toastEl.classList.remove("show"); }, 2500);
+        }
+
+        document.querySelectorAll(".btn-comprar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                if (this.classList.contains("agregado")) return;
+                var producto = this.dataset.producto;
+                this.textContent = "✅ Agregado";
+                this.classList.add("agregado");
+                count++;
+                cartCount.textContent = count;
+                mostrarToast(producto);
+            });
+        });
+    </script>
+
+</body>
+</html>
