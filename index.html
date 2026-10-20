@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Interactivo — Premium Edition</title>
+
+  <!-- 1) FUENTE PREMIUM: Inter con pesos 300/400/600/800 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       0) VARIABLES CSS — única fuente de verdad del diseño
+       ============================================================ */
+    :root {
+      /* Paleta dark mode */
+      --bg-base:        #070b17;
+      --glow-1:         rgba(59, 91, 219, 0.35);  /* mancha de luz azul   */
+      --glow-2:         rgba(124, 58, 237, 0.28); /* mancha de luz violeta */
+      --glow-3:         rgba(14, 165, 164, 0.18); /* mancha de luz teal    */
+
+      /* Cristal de las tarjetas */
+      --glass-bg:       rgba(255, 255, 255, 0.05);
+      --glass-border:   rgba(255, 255, 255, 0.12);
+      --glass-blur:     14px;
+
+      /* Texto */
+      --text-primary:   #f2f5ff;
+      --text-secondary: rgba(242, 245, 255, 0.55);
+      --accent:         #6d8bff;
+      --stock-ok:       #34d399;   /* esmeralda */
+      --stock-off:      rgba(242, 245, 255, 0.35); /* gris apagado */
+
+      /* Gradiente del botón */
+      --btn-gradient:   linear-gradient(135deg, #3b5bdb, #7c3aed);
+
+      /* Sombras multicapa */
+      --shadow-card:
+        0 24px 48px -12px rgba(0, 0, 0, 0.55),   /* sombra grande y difusa */
+        0 4px 12px 0 rgba(0, 0, 0, 0.30);         /* sombra pequeña y definida */
+      --shadow-btn: 0 6px 20px rgba(59, 91, 219, 0.35);
+      --shadow-btn-hover: 0 14px 32px rgba(124, 58, 237, 0.50);
+
+      /* Radios y tipografía */
+      --radius-card:  24px;
+      --radius-btn:   14px;
+      --radius-pill:  999px;
+      --font:         "Inter", system-ui, -apple-system, sans-serif;
+
+      /* Curva de movimiento consistente */
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ============================================================
+       1) BASE + MESH GRADIENT DE FONDO
+       ============================================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { color-scheme: dark; }
+
+    body {
+      font-family: var(--font);
+      min-height: 100vh;
+      color: var(--text-primary);
+      background-color: var(--bg-base);
+      /* 3 manchas de luz difuminadas superpuestas = "mesh gradient" */
+      background-image:
+        radial-gradient(600px 400px at 15% 5%,  var(--glow-1), transparent 70%),
+        radial-gradient(700px 500px at 85% 20%, var(--glow-2), transparent 70%),
+        radial-gradient(500px 500px at 50% 100%, var(--glow-3), transparent 70%);
+      background-attachment: fixed;
+    }
+
+    /* ============================================================
+       2) HEADER
+       ============================================================ */
+    header {
+      text-align: center;
+      padding: 72px 24px 8px;
+    }
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;            /* tracking negativo: look moderno */
+      line-height: 1.05;
+      background: linear-gradient(180deg, #ffffff 20%, #9db4ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    header p {
+      margin-top: 14px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    /* ============================================================
+       3) GRID RESPONSIVE (auto-fit, minmax)
+       ============================================================ */
+    #contenedor {
+      display: grid;
+      grid-template-columns: 1fr;                       /* mobile first */
+      gap: 28px;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    @media (min-width: 640px) {
+      #contenedor { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    }
+
+    /* ============================================================
+       4) TARJETA — GLASSMORPHISM + ELEVACIÓN
+       ============================================================ */
+    .producto {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 28px 26px 24px;
+      border-radius: var(--radius-card);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);            /* borde fino = cristal */
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      box-shadow: var(--shadow-card);                   /* multicapa */
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
+                  border-color 0.3s var(--ease);
+      /* Animación de entrada */
+      opacity: 0;
+      animation: fadeInUp 0.6s var(--ease) forwards;
+    }
+    .producto:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow:
+        0 32px 64px -12px rgba(0, 0, 0, 0.65),
+        0 6px 16px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    /* Escalonado: cada tarjeta entra 80ms después que la anterior */
+    .producto:nth-child(1) { animation-delay: 0.05s; }
+    .producto:nth-child(2) { animation-delay: 0.13s; }
+    .producto:nth-child(3) { animation-delay: 0.21s; }
+    .producto:nth-child(4) { animation-delay: 0.29s; }
+    .producto:nth-child(5) { animation-delay: 0.37s; }
+    .producto:nth-child(6) { animation-delay: 0.45s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Contenido de la tarjeta */
+    .producto .nombre {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .producto .precio {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-primary);
+    }
+    .producto .fila-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    /* ============================================================
+       5) ESTADOS DE STOCK
+       ============================================================ */
+    .stock {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--stock-ok);
+      text-shadow: 0 0 12px rgba(52, 211, 153, 0.45);  /* glow esmeralda */
+    }
+    .agotado {
+      color: var(--stock-off);
+      text-shadow: none;                                /* sin glow si no hay */
+    }
+
+    /* ============================================================
+       6) BOTÓN COMPRAR
+       ============================================================ */
+    .btn-comprar {
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius-btn);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      background: var(--btn-gradient);
+      box-shadow: var(--shadow-btn);
+      transition: all 0.3s var(--ease);
+    }
+    .btn-comprar:hover:not(:disabled) {
+      transform: translateY(-2px);                      /* se eleva */
+      box-shadow: var(--shadow-btn-hover);               /* sombra se expande */
+      filter: brightness(1.12);
+    }
+    .btn-comprar:active:not(:disabled) {
+      transform: scale(0.98);                           /* se hunde */
+    }
+    /* Estado agotado: apagado total */
+    .btn-comprar:disabled {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--stock-off);
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ============================================================
+       7) FOOTER + MOTION REDUCED (accesibilidad)
+       ============================================================ */
+    footer {
+      text-align: center;
+      padding: 0 24px 48px;
+      font-weight: 300;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .producto { animation: none; opacity: 1; }
+      .btn-comprar, .producto { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Catálogo de productos</h1>
+    <p>Objetos literales + delegación de eventos · Clase 26</p>
+  </header>
+
+  <div id="contenedor"></div>
+
+  <footer>Hecho con Vanilla JS y CSS puro — sin frameworks</footer>
+
+  <script>
+    // Estado inicial: catálogo con id único por producto
+    const catalogo = [
+      { id: 1, nombre: "Mouse", precio: 12.5, stock: 3 },
+      { id: 2, nombre: "Teclado", precio: 25, stock: 2 },
+      { id: 3, nombre: "Monitor", precio: 199.99, stock: 1 },
+      { id: 4, nombre: "Auriculares", precio: 45.75, stock: 0 }
+    ];
+
+    const contenedor = document.getElementById("contenedor");
+
+    // Renderizado: acumulo todo en un string y asigno innerHTML UNA sola vez
+    function renderizar() {
+      let html = "";
+      for (const producto of catalogo) {
+        // Badge de stock: verde neón si hay, gris apagado si agotado
+        const stock = producto.stock === 0
+          ? '<span class="stock agotado">Agotado</span>'
+          : `<span class="stock">Stock: ${producto.stock}</span>`;
+        // Botón deshabilitado si no hay stock
+        const btn = producto.stock === 0
+          ? '<button class="btn-comprar" disabled>Agotado</button>'
+          : `<button class="btn-comprar" data-id="${producto.id}">Comprar</button>`;
+        html += `
+          <div class="producto">
+            <span class="nombre">${producto.nombre}</span>
+            <span class="precio">$${producto.precio.toFixed(2)}</span>
+            <div class="fila-info">${stock}${btn}</div>
+          </div>`;
+      }
+      contenedor.innerHTML = html;
+    }
+
+    // Delegación: UN solo listener en el padre, no uno por botón
+    contenedor.addEventListener("click", (e) => {
+      // Verifico que el clic haya sido en un botón de compra
+      if (!e.target.classList.contains("btn-comprar")) return;
+      // dataset.id viene como string, lo convierto a número
+      const id = Number(e.target.dataset.id);
+      // Busco el producto de forma segura
+      const producto = catalogo.find((p) => p.id === id);
+      if (!producto) return;
+      // Descuento solo si queda stock
+      if (producto.stock > 0) {
+        producto.stock--;
+        renderizar();
+      }
+    });
+
+    // Primer dibujo de la pantalla
+    renderizar();
+  </script>
+</body>
+</html>
