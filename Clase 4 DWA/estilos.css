@@ -1,0 +1,213 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-primario: hsl(220, 80%, 40%);
+  --color-primario-claro: hsl(220, 80%, 55%);
+  --color-acento: hsl(30, 100%, 50%);
+  --color-acento-claro: hsl(30, 100%, 65%);
+  --color-texto: hsl(0, 0%, 15%);
+  --color-fondo: hsl(40, 30%, 97%);
+  --color-blanco: hsl(0, 0%, 100%);
+  --color-gris: hsl(0, 0%, 80%);
+  --color-oscuro: hsl(0, 0%, 10%);
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+/* ========== HEADER ========== */
+.header-bar {
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.cart-count {
+  background: var(--color-acento);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+}
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.10),
+      rgba(0, 0, 0, 0.75)
+    ),
+    url("jakub-dziubak-XtUd5SiX464-unsplash.jpg") center / cover no-repeat;
+  color: var(--color-blanco);
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.4);
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 500px;
+  opacity: 0.9;
+}
+
+/* ========== TOAST ========== */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--color-oscuro);
+  color: var(--color-blanco);
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  margin-top: auto;
+  padding: 28px 24px;
+  text-align: center;
+  color: var(--color-blanco);
+  font-weight: 500;
+  background: linear-gradient(
+    135deg,
+    var(--color-primario),
+    var(--color-primario-claro),
+    var(--color-acento)
+  );
+}
+
+.product-card {
+  background: var(--color-blanco);
+  border: 2px solid var(--color-primario);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.product-name {
+  font-size: 1.25rem;
+  color: var(--color-primario);
+}
+
+.product-desc {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-texto);
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-acento);
+}
+
+.btn-comprar {
+  background: radial-gradient(circle at 30% 30%, var(--color-acento), var(--color-primario-claro));
+  color: var(--color-blanco);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: filter 0.3s ease, transform 0.2s ease;
+  margin-top: auto;
+}
+
+.btn-comprar:hover {
+  filter: brightness(1.1);
+  transform: scale(1.03);
+}
+
+.btn-comprar:active {
+  transform: scale(0.97);
+}
+
+.btn-comprar.agregado {
+  background: hsl(140, 70%, 40%);
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero h1 { font-size: 2.2rem; }
+}
+
+@media (max-width: 600px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 { font-size: 1.8rem; }
+  .hero p { font-size: 1rem; }
+  .header-bar {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
